@@ -13,10 +13,16 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.7.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.21"
+=======
+    "@types/node": "^26.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+>>>>>>> de5a1f9 (GT1 Part 2: Added generics, utility types, enums)
   }
 }
