@@ -1,0 +1,53 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.2rem;
+  color: #1a1a1a;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-top: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+hr {
+  border: none;
+  border-top: 2px solid #e0e0e0;
+}
+
+button {
+  font-size: 0.9rem;
+  transition: background-color 0.25s;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+input:focus {
+  outline: 2px solid #646cff;
+}
+
+.user-card, .event-card, .registration-badge {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

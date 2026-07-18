@@ -17,7 +17,7 @@ export interface Event {
   description: string;
   category: "academic" | "social" | "sports" | "career" | "other";
   capacity: number;
-  status: EventStatus;
+  status: EventStatus;         // Uses the enum below
   startDate: Date;
   endDate: Date;
   organizerId: number;
@@ -29,13 +29,13 @@ export interface Registration {
   id: number;
   eventId: number;
   userId: number;
-  status: RegistrationStatus;
+  status: RegistrationStatus;  // Uses the enum below
   registeredAt: Date;
   notes?: string;
 }
 
 // ============================================
-// ENUMS
+// ENUMS (MUST BE EXPORTED)
 // ============================================
 
 export enum EventStatus {
@@ -89,7 +89,7 @@ export type PublicUser = Omit<User, "email" | "isActive">;
 export type CategoryCount = Record<Event["category"], number>;
 
 // ============================================
-// LIVE FEATURE HELPER
+// LIVE FEATURE HELPER (MUST BE EXPORTED)
 // ============================================
 
 export function getRemainingSpots(event: Event, registrations: Registration[]): number {
