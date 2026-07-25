@@ -8,7 +8,7 @@ export interface User {
   email: string;
   role: "student" | "organizer" | "admin";
   isActive: boolean;
-  createdAt: Date;
+  createdAt: Date;   // ← Required
 }
 
 export interface Event {
@@ -17,25 +17,25 @@ export interface Event {
   description: string;
   category: "academic" | "social" | "sports" | "career" | "other";
   capacity: number;
-  status: EventStatus;         // Uses the enum below
+  status: EventStatus;
   startDate: Date;
   endDate: Date;
   organizerId: number;
   location: string;
-  createdAt: Date;
+  createdAt: Date;   // ← Required
 }
 
 export interface Registration {
   id: number;
   eventId: number;
   userId: number;
-  status: RegistrationStatus;  // Uses the enum below
+  status: RegistrationStatus;
   registeredAt: Date;
   notes?: string;
 }
 
 // ============================================
-// ENUMS (MUST BE EXPORTED)
+// ENUMS
 // ============================================
 
 export enum EventStatus {
@@ -60,11 +60,11 @@ export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message?: string;
-  timestamp: Date;
+  timestamp?: Date;
 }
 
 // ============================================
-// GENERIC FUNCTIONS
+// GENERIC FUNCTIONS (from GT1)
 // ============================================
 
 export function getFirst<T>(items: T[]): T | undefined {
@@ -89,7 +89,7 @@ export type PublicUser = Omit<User, "email" | "isActive">;
 export type CategoryCount = Record<Event["category"], number>;
 
 // ============================================
-// LIVE FEATURE HELPER (MUST BE EXPORTED)
+// LIVE HELPER
 // ============================================
 
 export function getRemainingSpots(event: Event, registrations: Registration[]): number {
