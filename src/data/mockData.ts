@@ -1,7 +1,6 @@
 import type { User, Event, Registration } from "../types/index";
 import { EventStatus, RegistrationStatus } from "../types/index";
 
-// ===== MOCK USERS =====
 export const mockUsers: User[] = [
   {
     id: 1,
@@ -37,7 +36,6 @@ export const mockUsers: User[] = [
   },
 ];
 
-// ===== MOCK EVENTS =====
 export const mockEvents: Event[] = [
   {
     id: 1,
@@ -93,7 +91,6 @@ export const mockEvents: Event[] = [
   },
 ];
 
-// ===== MOCK REGISTRATIONS =====
 export const mockRegistrations: Registration[] = [
   {
     id: 1,

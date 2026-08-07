@@ -11,27 +11,26 @@ function UserCard({ user, onSelect }: UserCardProps) {
     if (onSelect) onSelect(user);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log("Search input:", e.target.value);
-  };
-
   return (
-    <div style={{ border: '1px solid #ccc', padding: '1rem', margin: '0.5rem 0', borderRadius: '4px' }}>
-      <h3>{user.name}</h3>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Role:</strong> {user.role}</p>
-      <p><strong>Status:</strong> {user.isActive ? 'Active' : 'Inactive'}</p>
-      <div>
-        <input
-          type="text"
-          placeholder="Quick note..."
-          onChange={handleChange}
-          style={{ marginRight: '0.5rem', padding: '0.3rem' }}
-        />
-        <button onClick={handleClick} style={{ padding: '0.3rem 1rem', cursor: 'pointer' }}>
-          Select
-        </button>
-      </div>
+    <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+        {user.name}
+      </h3>
+      <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+        {user.email}
+      </p>
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Role: {user.role}
+      </p>
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Status: {user.isActive ? "Active" : "Inactive"}
+      </p>
+      <button
+        onClick={handleClick}
+        className="mt-3 rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+      >
+        Select
+      </button>
     </div>
   );
 }

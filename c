@@ -13,7 +13,6 @@ function App() {
   const [events, setEvents] = useState<Event[]>([]);
   const [registrations] = useState<Registration[]>(mockRegistrations);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Ref
@@ -58,10 +57,10 @@ function App() {
     ).length;
     alert(
       `${event.title}\n\n` +
-      `${event.description}\n` +
-      `Location: ${event.location}\n` +
-      `Start: ${new Date(event.startDate).toLocaleString()}\n` +
-      `Registered: ${confirmedCount}/${event.capacity}`
+        `${event.description}\n` +
+        `Location: ${event.location}\n` +
+        `Start: ${new Date(event.startDate).toLocaleString()}\n` +
+        `Registered: ${confirmedCount}/${event.capacity}`
     );
   };
 
@@ -83,18 +82,9 @@ function App() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-pulse text-lg text-gray-500">Loading events...</div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="rounded-lg bg-red-50 p-6 text-red-700 dark:bg-red-900 dark:text-red-200">
-          Could not load events. Please try again.
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-lg text-gray-500 dark:text-gray-400">
+          Loading events...
         </div>
       </div>
     );
@@ -110,20 +100,12 @@ function App() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Event Tracker
             </h1>
-            <div>
-              <button
-                onClick={toggleDarkMode}
-                className="rounded bg-gray-800 px-3 py-1.5 text-sm text-white transition hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-gray-300"
-              >
-                {isDarkMode ? "Light Mode" : "Dark Mode"}
-              </button>
-              <button
-                onClick={() => setIsError(true)}
-                className="ml-2 rounded bg-red-100 px-3 py-1.5 text-sm text-red-700 transition hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800"
-              >
-                Simulate Error
-              </button>
-            </div>
+            <button
+              onClick={toggleDarkMode}
+              className="rounded bg-gray-800 px-3 py-1.5 text-sm text-white transition hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-gray-300"
+            >
+              {isDarkMode ? "Light Mode" : "Dark Mode"}
+            </button>
           </div>
 
           {/* Search */}
@@ -146,7 +128,9 @@ function App() {
           <hr className="my-6 border-gray-200 dark:border-gray-700" />
 
           {/* Users */}
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Users</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Users
+          </h2>
           <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <UserCard user={mockUsers[0]} onSelect={handleUserSelect} />
             <UserCard user={mockUsers[1]} onSelect={handleUserSelect} />
@@ -160,14 +144,16 @@ function App() {
 
           <button
             onClick={toggleDetails}
-            className="mt-3 rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition hover:bg-gray-700"
+            className="mt-3 rounded bg-gray-600 px-3 py-1.5 text-sm text-white transition hover:bg-gray-700 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
           >
             {showDetails ? "Hide" : "Show"} Details
           </button>
 
           {showDetails && (
             <div className="mt-3 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-              <h4 className="font-semibold text-gray-900 dark:text-white">Statistics</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white">
+                Statistics
+              </h4>
               <p className="text-sm text-gray-600 dark:text-gray-300">
                 Total Events: {events.length}
               </p>
@@ -175,7 +161,7 @@ function App() {
                 Total Registrations: {registrations.length}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                Active Events: {events.filter(e => e.status === "open").length}
+                Active Events: {events.filter((e) => e.status === "open").length}
               </p>
             </div>
           )}
