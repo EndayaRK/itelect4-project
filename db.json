@@ -1,0 +1,57 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Tech Talk: AI in Education",
+      "description": "Join us for an exciting talk about how AI is transforming education.",
+      "category": "academic",
+      "capacity": 50,
+      "status": "open",
+      "startDate": "2026-08-15T14:00:00.000Z",
+      "endDate": "2026-08-15T17:00:00.000Z",
+      "organizerId": 2,
+      "location": "Engineering Building, Room 301"
+    },
+    {
+      "id": "2",
+      "title": "Campus Sports Fest",
+      "description": "Annual sports competition with basketball, volleyball, and more!",
+      "category": "sports",
+      "capacity": 100,
+      "status": "ongoing",
+      "startDate": "2026-07-20T08:00:00.000Z",
+      "endDate": "2026-07-22T18:00:00.000Z",
+      "organizerId": 2,
+      "location": "University Gymnasium"
+    },
+    {
+      "id": "3",
+      "title": "Career Fair 2026",
+      "description": "Connect with top companies and explore job opportunities.",
+      "category": "career",
+      "capacity": 200,
+      "status": "closed",
+      "startDate": "2026-06-10T09:00:00.000Z",
+      "endDate": "2026-06-10T17:00:00.000Z",
+      "organizerId": 3,
+      "location": "Student Center, Hall A"
+    }
+  ],
+  "registrations": [
+    {
+      "id": "1",
+      "eventId": "1",
+      "userId": 1,
+      "status": "confirmed",
+      "registeredAt": "2026-07-02T00:00:00.000Z",
+      "notes": "Interested in AI ethics discussion."
+    },
+    {
+      "id": "2",
+      "eventId": "1",
+      "userId": 4,
+      "status": "pending",
+      "registeredAt": "2026-07-15T00:00:00.000Z"
+    }
+  ]
+}
