@@ -1,9 +1,10 @@
 import { NavLink, Outlet } from "react-router";
-import useToggle from "../hooks/useToggle";
 import useAuthStore from "../store/authStore";
+import useUiStore from "../store/uiStore";
 
 function Layout() {
-  const [isDarkMode, toggleDarkMode] = useToggle(false);
+  const isDarkMode = useUiStore((state) => state.isDarkMode);
+  const toggleDarkMode = useUiStore((state) => state.toggleDarkMode);
   const userName = useAuthStore((state) => state.userName);
   const logout = useAuthStore((state) => state.logout);
 
@@ -25,7 +26,7 @@ function Layout() {
             <NavLink to="/login" className={linkClass}>Login</NavLink>
           ) : (
             <>
-              <NavLink to="/submissions" className={linkClass}>My Registrations</NavLink>
+              <NavLink to="/registrations" className={linkClass}>My Registrations</NavLink>
               <button onClick={logout} className="rounded px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300">
                 Logout ({userName})
               </button>
