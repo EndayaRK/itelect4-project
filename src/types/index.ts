@@ -1,3 +1,7 @@
+// ============================================
+// CORE INTERFACES (your existing interfaces)
+// ============================================
+
 export interface User {
   id: number;
   name: string;
@@ -30,6 +34,10 @@ export interface Registration {
   notes?: string;
 }
 
+// ============================================
+// ENUMS
+// ============================================
+
 export enum EventStatus {
   Draft = "draft",
   Open = "open",
@@ -44,12 +52,20 @@ export enum RegistrationStatus {
   Waitlisted = "waitlisted",
 }
 
+// ============================================
+// GENERIC INTERFACE
+// ============================================
+
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message?: string;
   timestamp?: Date;
 }
+
+// ============================================
+// GENERIC FUNCTIONS
+// ============================================
 
 export function getFirst<T>(items: T[]): T | undefined {
   return items[0];
@@ -62,11 +78,19 @@ export function getById<T extends { id: number }>(
   return items.find(item => item.id === id);
 }
 
+// ============================================
+// UTILITY TYPES
+// ============================================
+
 export type EventUpdate = Partial<Event>;
 export type EventPreview = Pick<Event, "id" | "title" | "category" | "status" | "capacity">;
 export type UserPreview = Pick<User, "id" | "name" | "role">;
 export type PublicUser = Omit<User, "email" | "isActive">;
 export type CategoryCount = Record<Event["category"], number>;
+
+// ============================================
+// LIVE HELPER
+// ============================================
 
 export function getRemainingSpots(event: Event, registrations: Registration[]): number {
   const confirmed = registrations.filter(
@@ -74,3 +98,14 @@ export function getRemainingSpots(event: Event, registrations: Registration[]): 
   ).length;
   return Math.max(0, event.capacity - confirmed);
 }
+
+// ============================================
+// API TYPES (for json-server)
+// ============================================
+
+export type ApiRegistration = Omit<Registration, "id" | "registeredAt"> & {
+  id: string;
+  registeredAt: string;
+};
+
+export type NewRegistration = Omit<ApiRegistration, "id">;
