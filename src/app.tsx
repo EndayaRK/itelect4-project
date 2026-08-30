@@ -6,6 +6,7 @@ import EventsPage from "./pages/EventsPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import LoginPage from "./pages/LoginPage";
 import SubmissionPage from "./pages/SubmissionPage";
+import RegistrationPage from "./pages/RegistrationPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="submissions" element={<SubmissionPage />} />
+          <Route path="registrations" element={<RegistrationPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Route>
