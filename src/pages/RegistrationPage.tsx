@@ -2,10 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ApiRegistration } from "../types/index";
 import RegistrationBadge from "../components/RegistrationBadge";
 import { RegistrationForm } from "../components/RegistrationForm";
-import { fetchRegistrations, createRegistration, toRegistration } from "../api/clients";
+import { fetchRegistrations, createRegistration } from "../api/clients";
 import type { RegistrationFormData } from "@/schemas/registrationSchema";
 
-function RegistrationsPage() {
+function RegistrationPage() {
   const queryClient = useQueryClient();
 
   const { data, isPending, isError } = useQuery<ApiRegistration[]>({
@@ -20,27 +20,18 @@ function RegistrationsPage() {
     },
   });
 
-  // ===== HANDLERS FOR CONFIRM / CANCEL =====
   const handleConfirm = (registration: ApiRegistration) => {
     alert(`Registration #${registration.id} confirmed!`);
-    console.log("Confirmed:", registration.id);
-    // In a real app, you would call a mutation here:
-    // updateRegistration.mutate({ ...registration, status: "confirmed" });
   };
 
   const handleCancel = (registration: ApiRegistration) => {
     alert(`Registration #${registration.id} cancelled!`);
-    console.log("Cancelled:", registration.id);
-    // In a real app, you would call a mutation here:
-    // updateRegistration.mutate({ ...registration, status: "cancelled" });
   };
 
   const handleSubmit = (formData: RegistrationFormData) => {
     addRegistration.mutate({
       eventId: formData.eventId,
-      userId: formData.userId,
       status: formData.status,
-      registeredAt: new Date().toISOString(),
       notes: formData.notes,
     });
   };
@@ -80,9 +71,9 @@ function RegistrationsPage() {
         {data?.map((reg) => (
           <RegistrationBadge
             key={reg.id}
-            registration={toRegistration(reg)}
-            onConfirm={() => handleConfirm(reg)}   // ← Pass confirm handler
-            onCancel={() => handleCancel(reg)}     // ← Pass cancel handler
+            registration={reg}
+            onConfirm={() => handleConfirm(reg)}
+            onCancel={() => handleCancel(reg)}
           />
         ))}
       </div>
@@ -90,4 +81,4 @@ function RegistrationsPage() {
   );
 }
 
-export default RegistrationsPage;
+export default RegistrationPage;
