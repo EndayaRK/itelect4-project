@@ -1,83 +1,63 @@
-import type { Registration, Event, User } from "../types/index";
+import type { ApiRegistration } from "../types/index";
+import { Button } from "@/components/ui/button";
 
 interface RegistrationBadgeProps {
-  registration: Registration;
-  event?: Event;
-  user?: User;
-  onCancel?: (registration: Registration) => void;
-  onConfirm?: (registration: Registration) => void;
+  registration: ApiRegistration;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
-function RegistrationBadge({
+// A tiny status → class map so the badge colour reflects the status.
+const statusStyles: Record<ApiRegistration["status"], string> = {
+  pending: "bg-amber-100 text-amber-800",
+  confirmed: "bg-green-100 text-green-800",
+  cancelled: "bg-red-100 text-red-800",
+  waitlisted: "bg-gray-200 text-gray-800",
+};
+
+export default function RegistrationBadge({
   registration,
-  event,
-  user,
-  onCancel,
   onConfirm,
+  onCancel,
 }: RegistrationBadgeProps) {
-  const handleCancel = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    if (onCancel) onCancel(registration);
-  };
-
-  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    if (onConfirm) onConfirm(registration);
-  };
-
-  const statusColor = {
-    pending: "text-yellow-600 dark:text-yellow-400",
-    confirmed: "text-green-600 dark:text-green-400",
-    cancelled: "text-red-600 dark:text-red-400",
-    waitlisted: "text-gray-500 dark:text-gray-400",
-  }[registration.status] || "text-gray-500 dark:text-gray-400";
+  // registeredAt is an ISO string now, so it has to be wrapped in a Date
+  // before anything date-related can be done with it.
+  const submitted = new Date(registration.registeredAt).toLocaleString();
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-      <h4 className="font-bold text-gray-900 dark:text-white">
-        Registration #{registration.id}
-      </h4>
-      {user && (
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-          User: {user.name} ({user.email})
-        </p>
-      )}
-      {event && (
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-          Event: {event.title}
-        </p>
-      )}
-      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-        Status: <span className={statusColor}>{registration.status}</span>
+    <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+          #{registration.id.slice(-6)}
+        </span>
+        <span
+          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${statusStyles[registration.status]}`}
+        >
+          {registration.status}
+        </span>
+      </div>
+
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        Event: {registration.eventId}
       </p>
-      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-        Registered: {new Date(registration.registeredAt).toLocaleString()}
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        Registered: {submitted}
       </p>
+
       {registration.notes && (
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Notes: {registration.notes}
+        <p className="mt-1 text-sm italic text-gray-500">
+          {registration.notes}
         </p>
       )}
+
       <div className="mt-3 flex gap-2">
-        {registration.status === "pending" && (
-          <button
-            onClick={handleConfirm}
-            className="rounded bg-green-600 px-3 py-1 text-sm text-white transition hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
-          >
-            Confirm
-          </button>
-        )}
-        {registration.status !== "cancelled" && (
-          <button
-            onClick={handleCancel}
-            className="rounded bg-red-600 px-3 py-1 text-sm text-white transition hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
-          >
-            Cancel
-          </button>
-        )}
+        <Button size="sm" onClick={onConfirm}>
+          Confirm
+        </Button>
+        <Button size="sm" variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
       </div>
     </div>
   );
 }
-
-export default RegistrationBadge;

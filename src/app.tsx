@@ -5,7 +5,7 @@ import DashboardPage from "./pages/DashboardPage";
 import EventsPage from "./pages/EventsPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import LoginPage from "./pages/LoginPage";
-import SubmissionPage from "./pages/SubmissionPage";
+import RegisterPage from "./pages/RegisterPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -17,8 +17,9 @@ function App() {
         <Route path="events" element={<EventsPage />} />
         <Route path="events/:id" element={<EventDetailPage />} />
         <Route path="login" element={<LoginPage />} />
+        {/* Public, like login: you cannot be logged in yet. */}
+        <Route path="register" element={<RegisterPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="submissions" element={<SubmissionPage />} />
           <Route path="registrations" element={<RegistrationPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />

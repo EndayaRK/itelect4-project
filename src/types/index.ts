@@ -100,12 +100,60 @@ export function getRemainingSpots(event: Event, registrations: Registration[]): 
 }
 
 // ============================================
-// API TYPES (for json-server)
+// API TYPES
+// What the backend actually sends over the wire.
+// Every id is a 24-character hex STRING (MongoDB ObjectId),
+// not a number. Every date is an ISO string.
 // ============================================
 
-export type ApiRegistration = Omit<Registration, "id" | "registeredAt"> & {
+export type ApiUser = Omit<User, "id" | "createdAt"> & {
   id: string;
+  createdAt: string;
+};
+
+export type ApiEvent = Omit<
+  Event,
+  "id" | "organizerId" | "startDate" | "endDate" | "createdAt"
+> & {
+  id: string;
+  organizerId: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+};
+
+export type ApiRegistration = Omit<
+  Registration,
+  "id" | "eventId" | "userId" | "registeredAt"
+> & {
+  id: string;
+  eventId: string;
+  userId: string;
   registeredAt: string;
 };
 
-export type NewRegistration = Omit<ApiRegistration, "id">;
+// What the client sends to POST /api/registrations
+export type NewRegistration = {
+  eventId: string;
+  status: RegistrationStatus;
+  notes?: string;
+};
+
+// What POST /api/auth/register accepts
+export interface RegisterBody {
+  name: string;
+  email: string;
+  password: string;
+}
+
+// What POST /api/auth/login accepts
+export interface LoginBody {
+  email: string;
+  password: string;
+}
+
+// What POST /api/auth/login returns
+export interface AuthReply {
+  token: string;
+  user: ApiUser;
+}

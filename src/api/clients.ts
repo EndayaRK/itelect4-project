@@ -1,56 +1,87 @@
-import type { Event, Registration, ApiRegistration, NewRegistration } from "../types/index";
+import type {
+  ApiEvent,
+  ApiRegistration,
+  ApiUser,
+  AuthReply,
+  LoginBody,
+  NewRegistration,
+  RegisterBody,
+} from "../types/index";
+import useAuthStore from "../store/authStore";
 
-export const API_URL = "http://localhost:3001";
+// Vite bakes this in at build time. Changing it means a rebuild.
+export const API_URL = import.meta.env.VITE_API_URL;
 
-// ===== EVENTS =====
+if (!API_URL) {
+  throw new Error(
+    "VITE_API_URL is missing. Copy .env.example to .env, fill it in, and restart npm run dev."
+  );
+}
 
-export async function fetchEvents(): Promise<Event[]> {
-  const res = await fetch(`${API_URL}/events`);
+// Every call goes through here: the host, the JSON header, the token
+// when there is one, and the API's own message when it refuses.
+async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const token = useAuthStore.getState().token;
+
+  const res = await fetch(`${API_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...init.headers,
+    },
+  });
+
   if (!res.ok) {
-    throw new Error("Could not load events");
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.message ?? `Request failed (${res.status})`);
   }
+
+  // 204 has no body -- DELETE uses this
+  if (res.status === 204) {
+    return undefined as T;
+  }
+
   return res.json();
 }
 
-export async function fetchEventById(id: string): Promise<Event> {
-  const res = await fetch(`${API_URL}/events/${id}`);
-  if (!res.ok) {
-    throw new Error(`Could not load event with ID "${id}"`);
-  }
-  return res.json();
+// ===== EVENTS =====
+
+export function fetchEvents(): Promise<ApiEvent[]> {
+  return request<ApiEvent[]>("/api/events");
+}
+
+export function fetchEventById(id: string): Promise<ApiEvent> {
+  return request<ApiEvent>(`/api/events/${id}`);
 }
 
 // ===== REGISTRATIONS =====
 
-export async function fetchRegistrations(): Promise<ApiRegistration[]> {
-  const res = await fetch(`${API_URL}/registrations`);
-  if (!res.ok) {
-    throw new Error("Could not load registrations");
-  }
-  return res.json();
+export function fetchRegistrations(): Promise<ApiRegistration[]> {
+  return request<ApiRegistration[]>("/api/registrations");
 }
 
-export function toRegistration(api: ApiRegistration): Registration {
-  return {
-    id: Number(api.id),
-    eventId: Number(api.eventId),
-    userId: api.userId,
-    status: api.status,
-    registeredAt: new Date(api.registeredAt),
-    notes: api.notes,
-  };
-}
-
-export async function createRegistration(
+export function createRegistration(
   newRegistration: NewRegistration
 ): Promise<ApiRegistration> {
-  const res = await fetch(`${API_URL}/registrations`, {
+  return request<ApiRegistration>("/api/registrations", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newRegistration),
   });
-  if (!res.ok) {
-    throw new Error("Could not save registration");
-  }
-  return res.json();
+}
+
+// ===== AUTH =====
+
+export function registerUser(body: RegisterBody): Promise<ApiUser> {
+  return request<ApiUser>("/api/auth/register", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function loginUser(body: LoginBody): Promise<AuthReply> {
+  return request<AuthReply>("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 }

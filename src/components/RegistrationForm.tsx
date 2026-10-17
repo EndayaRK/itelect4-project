@@ -1,7 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registrationSchema, type RegistrationFormData } from "@/schemas/registrationSchema";
+import {
+  registrationSchema,
+  type RegistrationFormData,
+} from "@/schemas/registrationSchema";
 import { RegistrationStatus } from "../types/index";
+import { fetchEvents } from "../api/clients";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +16,15 @@ interface RegistrationFormProps {
   isPending?: boolean;
 }
 
-export function RegistrationForm({ onSubmit, isPending = false }: RegistrationFormProps) {
+export function RegistrationForm({
+  onSubmit,
+  isPending = false,
+}: RegistrationFormProps) {
+  const { data: events, isPending: eventsLoading } = useQuery({
+    queryKey: ["events"],
+    queryFn: fetchEvents,
+  });
+
   const {
     register,
     handleSubmit,
@@ -20,44 +33,42 @@ export function RegistrationForm({ onSubmit, isPending = false }: RegistrationFo
     resolver: zodResolver(registrationSchema),
     mode: "onBlur",
     defaultValues: {
-      userId: 1,
+      eventId: "",
       status: RegistrationStatus.Pending,
     },
   });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Event ID */}
+      {/* Event -- dropdown, pulled from the API */}
       <div className="grid gap-1.5">
         <Label htmlFor="eventId" className="text-foreground">
-          Event ID
+          Event
         </Label>
-        <Input
+        <select
           id="eventId"
-          type="number"
-          {...register("eventId", { valueAsNumber: true })}
+          {...register("eventId")}
+          disabled={eventsLoading}
           aria-invalid={errors.eventId ? true : undefined}
-          placeholder="Enter event ID (e.g., 1)"
-        />
+          className="h-8 rounded-lg border border-input bg-background px-2.5 text-sm text-foreground"
+        >
+          <option value="">
+            {eventsLoading ? "Loading events..." : "Pick an event"}
+          </option>
+          {events?.map((event) => (
+            <option key={event.id} value={event.id}>
+              {event.title}
+            </option>
+          ))}
+        </select>
         {errors.eventId && (
           <p className="text-sm text-red-600">{errors.eventId.message}</p>
         )}
-      </div>
-
-      {/* User ID */}
-      <div className="grid gap-1.5">
-        <Label htmlFor="userId" className="text-foreground">
-          User ID
-        </Label>
-        <Input
-          id="userId"
-          type="number"
-          {...register("userId", { valueAsNumber: true })}
-          aria-invalid={errors.userId ? true : undefined}
-          placeholder="Enter user ID"
-        />
-        {errors.userId && (
-          <p className="text-sm text-red-600">{errors.userId.message}</p>
+        {events && events.length === 0 && (
+          <p className="text-sm text-amber-600">
+            No events yet — create one in Postman first, or have another
+            organizer create one.
+          </p>
         )}
       </div>
 
@@ -97,12 +108,7 @@ export function RegistrationForm({ onSubmit, isPending = false }: RegistrationFo
         )}
       </div>
 
-      {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isPending}
-        className="justify-self-start"
-      >
+      <Button type="submit" disabled={isPending} className="justify-self-start">
         {isPending ? "Saving..." : "Register"}
       </Button>
     </form>
