@@ -6,6 +6,7 @@ import type {
   LoginBody,
   NewRegistration,
   RegisterBody,
+  AiReview,
 } from "../types/index";
 import useAuthStore from "../store/authStore";
 
@@ -67,6 +68,13 @@ export function createRegistration(
   return request<ApiRegistration>("/api/registrations", {
     method: "POST",
     body: JSON.stringify(newRegistration),
+  });
+}
+
+export function askAi(prompt: string): Promise<AiReview> {
+  return request<AiReview>("/api/ai", {
+    method: "POST",
+    body: JSON.stringify({ prompt }),
   });
 }
 

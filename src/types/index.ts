@@ -2,6 +2,13 @@
 // CORE INTERFACES (your existing interfaces)
 // ============================================
 
+export interface AiReview {
+  summary: string;
+  highlights: string[];
+  improvements: string[];
+  readiness: "ready" | "almost" | "not-yet";
+}
+
 export interface User {
   id: number;
   name: string;
