@@ -27,6 +27,7 @@ function Layout() {
           ) : (
             <>
               <NavLink to="/registrations" className={linkClass}>My Registrations</NavLink>
+              <NavLink to="/review" className={linkClass}>AI Review</NavLink>
               <button onClick={logout} className="rounded px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300">
                 Logout ({userName})
               </button>
